@@ -1,14 +1,17 @@
 import configparser
 import glob, os
+import subprocess
 from PyPDF2 import PdfFileReader
 from Models.Paper import Paper
 from pathlib import Path
 
-papers = dict()
-home = str(Path.home())
-
 config = configparser.ConfigParser()
-config.read(home + '/.config/papergirl/paper.ini')
+config.read(str(Path.home()) + '/.config/papergirl/paper.ini')
+
+papers = dict()
+files = []
+PATH = str(Path.home) + "/" + config['PAPER']['inbox']
+
 
 def get_info(path):
     with open(path, 'rb') as f:
@@ -17,9 +20,16 @@ def get_info(path):
         file_name = os.path.basename(path)
         number_of_pages = pdf.getNumPages()
 
-    papers[file_name]=(Paper(info.author, info.creator, info.producer, info.subject, info.title, file_name, path))
+    return Paper(info.author, info.creator, info.producer, info.subject, info.title, file_name, path)
+
+def get_files(path):
+    os.chdir(path) # we need to
+    files = glob.glob("*.pdf")
+    return files
 
 
-os.chdir( home + "/" + config['PAPER']['inbox'])
-for file in glob.glob("*.pdf"):
-    get_info(file)
+def get_files( ):
+    os.chdir(PATH)
+    files = glob.glob("*.pdf")
+    return files
+
