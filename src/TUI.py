@@ -18,7 +18,7 @@ def print_menu(stdscr, selected_row_idx):
 			stdscr.attroff(curses.color_pair(1))
 		else:
 			stdscr.addstr(y, x, row)
-	stdscr.refresh()
+	                stdscr.refresh()
 
 
 def print_center(stdscr, text):
@@ -30,24 +30,24 @@ def print_center(stdscr, text):
 	stdscr.refresh()
 
 def drawRrectangle(win, corners):                                         
-    """Draw a rectangle with corners at the provided upper-left                 
-    and lower-right coordinates.                                                
-    """                                                                         
-    (ulx,uly,lrx,lry) = corners 
-    win.vline(uly+1, ulx, curses.ACS_VLINE, lry - uly - 1)                      
-    win.hline(uly, ulx+1, curses.ACS_HLINE, lrx - ulx - 1)                      
-    win.hline(lry, ulx+1, curses.ACS_HLINE, lrx - ulx - 1)                      
-    win.vline(uly+1, lrx, curses.ACS_VLINE, lry - uly - 1)                      
-    win.addch(uly, ulx, curses.ACS_ULCORNER)                                    
-    win.addch(uly, lrx, curses.ACS_URCORNER)                                    
-    win.addch(lry, lrx, curses.ACS_LRCORNER)                                    
-    win.addch(lry, ulx, curses.ACS_LLCORNER)
+        """Draw a rectangle with corners at the provided upper-left                 
+        and lower-right coordinates.                                                
+        """                                                                         
+        (ulx,uly,lrx,lry) = corners 
+        win.vline(uly+1, ulx, curses.ACS_VLINE, lry - uly - 1)                      
+        win.hline(uly, ulx+1, curses.ACS_HLINE, lrx - ulx - 1)                      
+        win.hline(lry, ulx+1, curses.ACS_HLINE, lrx - ulx - 1)                      
+        win.vline(uly+1, lrx, curses.ACS_VLINE, lry - uly - 1)                      
+        win.addch(uly, ulx, curses.ACS_ULCORNER)                                    
+        win.addch(uly, lrx, curses.ACS_URCORNER)                                    
+        win.addch(lry, lrx, curses.ACS_LRCORNER)                                    
+        win.addch(lry, ulx, curses.ACS_LLCORNER)
 
 def getCorners(stdscr):
-    uly = (int(stdscr.getbegyx()[0]))
-    ulx = (int(stdscr.getbegyx()[1]))
-    lry = (int(stdscr.getmaxyx()[0] * 0.7))
-    lrx = (int(stdscr.getmaxyx()[1] - 1))
+        uly = (int(stdscr.getbegyx()[0]))
+        ulx = (int(stdscr.getbegyx()[1]))
+        lry = (int(stdscr.getmaxyx()[0] * 0.7))
+        lrx = (int(stdscr.getmaxyx()[1] - 1))
 
     return ulx, uly, lrx, lry
 
@@ -79,7 +79,7 @@ def main(stdscr):
 			# if user selected last row, exit the program
 			if current_row == len(menu)-1:
 		            break
-                         
+                    
 
 		print_menu(stdscr, current_row)
 
