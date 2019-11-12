@@ -1,7 +1,7 @@
 import configparser
 import glob, os
 from PyPDF2 import PdfFileReader
-from src.Models.Paper import Paper
+from Models.Paper import Paper
 from pathlib import Path
 
 config = configparser.ConfigParser()
