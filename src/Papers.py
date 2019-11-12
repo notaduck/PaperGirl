@@ -9,7 +9,7 @@ config.read(str(Path.home()) + '/.config/papergirl/paper.ini')
 
 papers = dict()
 files = []
-PATH = str(Path.home()) + "/"  + config['PAPER']['inbox']
+PATH = str(Path.home()) + "/"  + config['PAPERGIRL']['inbox']
 
 def get_info(path):
     with open(path, 'rb') as f:
