@@ -18,7 +18,7 @@ def print_menu(stdscr, selected_row_idx):
 			stdscr.attroff(curses.color_pair(1))
 		else:
 			stdscr.addstr(y, x, row)
-	                stdscr.refresh()
+                        stdscr.refresh()
 
 
 def print_center(stdscr, text):
