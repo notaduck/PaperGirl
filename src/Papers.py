@@ -5,7 +5,7 @@ from Models.Paper import Paper
 from pathlib import Path
 
 config = configparser.ConfigParser()
-config.read(str(Path.home()) + '/.config/papergirl/paper.ini')
+config.read(str(Path.home()) + '/.config/papergirl/config.ini')
 
 papers = dict()
 files = []
