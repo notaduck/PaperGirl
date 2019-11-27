@@ -20,9 +20,10 @@ def test(stdscr):
     stdscr.box()
     stdscr.addstr(2, 2, "panels everywhere")
     win1, panel1 = make_panel(10, 12, 5, 5, "Panel 1")
-    win2, panel2 = make_panel(10, 12, 8, 8, "Panel 2")
+    win2, panel2 = make_panel(10, 12, 10, 20, "Panel 2")
     curses.panel.update_panels()
     stdscr.refresh()
+    win2.addstr(2,2, 'asdf')
     sleep(1)
 
     panel1.top()
@@ -31,12 +32,12 @@ def test(stdscr):
 
     sleep(1)
 
-    for i in range(20):
-        panel2.move(8, 8+i)
-        curses.panel.update_panels()
-        stdscr.refresh()
-
-        sleep(0.1)
+    # for i in range(20):
+    #     panel2.move(8, 8+i)
+    #     win2.addstr(0,0,"asdf")
+    #     curses.panel.update_panels()
+    #     stdscr.refresh()
+    #     sleep(0.1)
 
     sleep(1)
 

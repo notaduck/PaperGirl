@@ -68,3 +68,40 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+# Emacs files #
+**__pycache__/
+*_flymake.*
+*~
+.\#*
+.dir-locals.el
+.projectile
+/eshell/history
+/eshell/lastdir
+/server/
+\#*\#
+emacs/**/*.elc
+emacs/**/*.rel
+emacs/**/*.yas-compiled-snippets-el
+emacs/**/*_archive
+emacs/**/.cache/
+emacs/**/.cask/
+emacs/**/.emacs.desktop
+emacs/**/.emacs.desktop.lock
+emacs/**/.org-id-locations
+emacs/**/.python-environments/
+emacs/**/.yas-compiled-snippets.el
+emacs/**/anaconda-mode/
+emacs/**/auto-save-list
+emacs/**/auto/
+emacs/**/config.el
+emacs/**/dist/
+emacs/**/elpa/
+emacs/**/flycheck_*.el
+emacs/**/history
+emacs/**/ido.last
+emacs/**/places
+emacs/**/semanticdb/
+emacs/**/tramp
+session*
+**/.mypy_cache/

@@ -1,16 +1,17 @@
+# -*- coding: utf-8 -*-
 # https://raw.githubusercontent.com/nikhilkumarsingh/python-curses-tut/master/code/example5.py
 import curses
 from Papers import get_info, get_files
 
-# menu = ['Home', 'Play', 'Scoreboard', 'Exit']
-menu = get_files() + ['Exit']
+# MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
+MENU = get_files() + ['Exit']
 
 def printMenu(stdscr, selected_row_idx):
     stdscr.clear()
     h, w = stdscr.getmaxyx()
-    for idx, row in enumerate(menu):
+    for idx, row in enumerate(MENU):
         x = w//2 - len(row)//2
-        y = h//2 - len(menu)//2 + idx
+        y = h//2 - len(MENU)//2 + idx
         if idx == selected_row_idx:
             stdscr.attron(curses.color_pair(1))
             stdscr.addstr(y, x, row)
@@ -18,7 +19,6 @@ def printMenu(stdscr, selected_row_idx):
         else:
             stdscr.addstr(y, x, row)
     stdscr.refresh()
-
 
 def printCenter(stdscr, text):
     stdscr.clear()
@@ -28,6 +28,12 @@ def printCenter(stdscr, text):
     stdscr.addstr(y, x, text)
     stdscr.refresh()
 
+def printCenterBox(stdscr, text):
+    h, w = stdscr.getmaxyx()
+    x = w//2 - len(text)//2
+    y = h//2
+    stdscr.addstr(y, x, text)
+    stdscr.refresh()
 
 def printRectangle(win):
     """Draw a rectangle with corners at the provided upper-left
@@ -43,15 +49,20 @@ def printRectangle(win):
     win.addch(lry, lrx, curses.ACS_LRCORNER)
     win.addch(lry, ulx, curses.ACS_LLCORNER)
 
-
 def getCorners(stdscr):
     uly = (int(stdscr.getbegyx()[0]))
     ulx = (int(stdscr.getbegyx()[1]))
-    lry = (int(stdscr.getmaxyx()[0]* 0.5))
+    lry = (int(stdscr.getmaxyx()[0] - 2))
     lrx = (int(stdscr.getmaxyx()[1] - 1))
 
     return ulx, uly, lrx, lry
 
+def make_panel(h, l, y, x):
+    win = curses.newwin(h, l, y, x)
+    win.erase()
+    win.box()
+    panel = curses.panel.new_panel(win)
+    return win, panel
 
 def main(stdscr):
     # turn off cursor blinking
@@ -63,26 +74,25 @@ def main(stdscr):
     # specify the current selected row
     current_row = 0
 
-    # print the menu
+    # print the MENU
     printMenu(stdscr, current_row)
-
+    printRectangle(stdscr)
     while 1:
         key = stdscr.getch()
 
         if key == curses.KEY_UP and current_row > 0:
             current_row -= 1
-        elif key == curses.KEY_DOWN and current_row < len(menu)-1:
+        elif key == curses.KEY_DOWN and current_row < len(MENU)-1:
             current_row += 1
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            printCenter(stdscr, "You selected '{}'".format(menu[current_row]))
+            printCenter(stdscr, "You selected '{}'".format(MENU[current_row]))
             stdscr.getch()
-            current_file = menu[current_row]
             # if user selected last row, exit the program
-            if current_row == len(menu)-1:
+            if current_row == len(MENU)-1:
                 break
 
-
         printMenu(stdscr, current_row)
+        curses.napms(100)
 
-
-curses.wrapper(main)
+if __name__ == '__main__':
+    curses.wrapper(main)
