@@ -7,9 +7,19 @@ from Papers import get_info, get_files
 MENU = get_files() + ['Exit']
 
 class paperPanel:
-    def __init__(self, h: int, l: int, y: int, x: int, panelName: str):
+    def __init__(self, h, l, y, x, title=''):
+        # create window with a bounding box
         self.win = curses.newwin(h, l, y, x)
+        self.win.erase()
+        self.win.box()
 
+        # write title centered on top of bounding box
+        titlePadded = f" {title} "
+        titleBeginning = l//2 - len(titlePadded)//2
+
+        # init active row to 0
+        self.currentRow = 0
+        self.panel = cpanel.new_panel(self.win)
 
 def printMenu(scr, selected_row_idx, items):
     # scr.clear()
@@ -63,45 +73,36 @@ def main(scr):
         pass
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
+    # find window corners to init paper windows
     y0, x0, ncols, nlines = getCorners(scr)
-    win1, panel1 = init_panel(nlines//2, ncols, y0, x0, "1st panel")
-    win2, panel2 = init_panel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel")
-    wins = [win1, win2]
-    panels = [panel1, panel2]
+    topPaper = paperPanel(nlines//2, ncols, y0, x0, "1st panel")
+    botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel")
+    papers = [botPaper, topPaper]
 
-
-
-    # specify the current selected row
-    current_row = 0
-    current_win = win1
-    current_pan = panel1
-
-    printMenu(win2, current_row, MENU)
-    scr.refresh()
+    # initial display of windows before loop
+    printMenu(topPaper.win, topPaper.currentRow, MENU)
+    printMenu(botPaper.win, botPaper.currentRow, MENU)
 
     # run stuff
     while True:
         key = scr.getch()
 
         if key == 27:
+            # exit
             break
-        elif (key == curses.KEY_UP) and (current_row > 0):
-            current_row -= 1
-        elif (key == curses.KEY_DOWN) and (current_row < len(MENU)-1):
-            current_row += 1
+        elif (key == curses.KEY_UP) and (papers[0].currentRow > 0):
+            # go down a row
+            papers[0].currentRow -= 1
+        elif (key == curses.KEY_DOWN) and (papers[0].currentRow < len(MENU)-1):
+            # go up a row
+            papers[0].currentRow += 1
         elif key == 9:
-            current_win = wins[-1]
-            currentPanel = panels[-1]
-            wins = wins[::-1]
-            panels = panels[::-1]
-
+            # tab changes avtive paper window
+            papers = papers[::-1]
         else:
             pass
 
-        if current_win == win2:
-            printMenu(win2, current_row, MENU)
-
-        # scr.refresh()
+        printMenu(papers[0].win, papers[0].currentRow, MENU)
 
 
 if __name__ == '__main__':
