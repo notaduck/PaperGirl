@@ -6,6 +6,11 @@ from Papers import get_info, get_files
 # MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
 MENU = get_files() + ['Exit']
 
+class paperPanel:
+    def __init__(self, h: int, l: int, y: int, x: int, panelName: str):
+        self.win = curses.newwin(h, l, y, x)
+
+
 def printMenu(scr, selected_row_idx, items):
     # scr.clear()
     h, w = scr.getmaxyx()
@@ -29,6 +34,7 @@ def printMenu(scr, selected_row_idx, items):
         else:
             scr.addstr(y, x, row)
     scr.refresh()
+    curses.panel.update_panels()
 
 def init_panel(nlines, ncols, begin_y, begin_x, a_str):
     str_pad = f" {a_str}  "
@@ -71,7 +77,6 @@ def main(scr):
     current_pan = panel1
 
     printMenu(win2, current_row, MENU)
-    curses.panel.update_panels()
     scr.refresh()
 
     # run stuff
@@ -96,8 +101,7 @@ def main(scr):
         if current_win == win2:
             printMenu(win2, current_row, MENU)
 
-        curses.panel.update_panels()
-        scr.refresh()
+        # scr.refresh()
 
 
 if __name__ == '__main__':

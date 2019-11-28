@@ -32,12 +32,12 @@ def test(stdscr):
 
     sleep(1)
 
-    # for i in range(20):
-    #     panel2.move(8, 8+i)
-    #     win2.addstr(0,0,"asdf")
-    #     curses.panel.update_panels()
-    #     stdscr.refresh()
-    #     sleep(0.1)
+    for i in range(20):
+        panel2.move(8, 8+i)
+        win2.addstr(0,0,"asdf")
+        curses.panel.update_panels()
+        stdscr.refresh()
+        sleep(0.1)
 
     sleep(1)
 
