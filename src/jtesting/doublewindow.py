@@ -4,7 +4,7 @@ import curses
 from Papers import get_info, get_files
 
 # MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
-MENU = get_files() + ['Exit']
+MENU = get_files() + ["adsfkjasdfkajsgflaksjhflaksjdhalasdflkjasdflkjadsflkjadsflkajsdflkajshfdlkasjdfalksdjfksdjhfalskdjfhalsdkjfhalskdjfhalskdjfhalskdjhalskdjfhalsdkjfalsdkfj"] + ['Exit']
 
 class paperPanel:
     def __init__(self, h, l, y, x, title=''):
@@ -21,9 +21,20 @@ class paperPanel:
         self.currentRow = 0
         self.panel = cpanel.new_panel(self.win)
 
+
+def fixStrings(listOfStrings, maxWidth):
+    for i, elem in enumerate(listOfStrings):
+        if len(elem) > maxWidth:
+            # should we show extension?
+            listOfStrings[i] = elem[:maxWidth-7] + '...'
+    return listOfStrings
+
 def printMenu(scr, selected_row_idx, items):
     # scr.clear()
     h, w = scr.getmaxyx()
+
+    # Make sure strings within a single line
+    items = fixStrings(items, w-2)
     for y in range(1, h-1):
         scr.addstr(y, 1, " "*(w-2))
 
