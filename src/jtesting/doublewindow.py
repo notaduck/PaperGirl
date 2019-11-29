@@ -3,24 +3,38 @@ from curses import panel as cpanel
 import curses
 from Papers import get_info, get_files
 
-# MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
-MENU = get_files() + ["adsfkjasdfkajsgflaksjhflaksjdhalasdflkjasdflkjadsflkjadsflkajsdflkajshfdlkasjdfalksdjfksdjhfalskdjfhalsdkjfhalskdjfhalskdjfhalskdjhalskdjfhalsdkjfalsdkfj"] + ['Exit']
+MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
+FILEMENU = get_files() + ['Exit']
 
 class paperPanel:
-    def __init__(self, h, l, y, x, title=''):
+    def __init__(self, h, l, y, x, title='', items=['']):
         # create window with a bounding box
         self.win = curses.newwin(h, l, y, x)
         self.win.erase()
         self.win.box()
+        self.title = title
+        self.items = items
+        # create paper title if not empty
+        if title != '':
+            self.writeTitle(l, title)
+
+            # init active row to 0
+        self.currentRow = 0
+        self.panel = cpanel.new_panel(self.win)
+
+    def writeTitle(self, l, title):
+        """ Writes the title in top center of the bounding box
+
+        :param l: width of window
+        :param title: title of window to be written
+        :returns: Nothing
+        :rtype: Null
+        """
 
         # write title centered on top of bounding box
         titlePadded = f" {title} "
         titleBeginning = l//2 - len(titlePadded)//2
-
-        # init active row to 0
-        self.currentRow = 0
-        self.panel = cpanel.new_panel(self.win)
-
+        self.win.addstr(0, titleBeginning, titlePadded)
 
 def fixStrings(listOfStrings, maxWidth):
     for i, elem in enumerate(listOfStrings):
@@ -29,7 +43,7 @@ def fixStrings(listOfStrings, maxWidth):
             listOfStrings[i] = elem[:maxWidth-7] + '...'
     return listOfStrings
 
-def printMenu(scr, selected_row_idx, items):
+def printMenu(scr, selected_row_idx, items=['']):
     # scr.clear()
     h, w = scr.getmaxyx()
 
@@ -43,8 +57,6 @@ def printMenu(scr, selected_row_idx, items):
         # Check if index is out of panel
         if idx > h-3:
             break
-        # x = w//2 - len(row)//2 - 20
-        # y = h//2 - len(MENU)//2 + idx
         x = 1
         y = 1 + idx
 
@@ -54,6 +66,7 @@ def printMenu(scr, selected_row_idx, items):
             scr.attroff(curses.color_pair(1))
         else:
             scr.addstr(y, x, row)
+
     scr.refresh()
     curses.panel.update_panels()
 
@@ -86,25 +99,27 @@ def main(scr):
 
     # find window corners to init paper windows
     y0, x0, ncols, nlines = getCorners(scr)
-    topPaper = paperPanel(nlines//2, ncols, y0, x0, "1st panel")
-    botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel")
+    topPaper = paperPanel(nlines//2, ncols, y0, x0, "1st panel", MENU)
+    botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel", FILEMENU)
     papers = [botPaper, topPaper]
 
     # initial display of windows before loop
-    printMenu(topPaper.win, topPaper.currentRow, MENU)
-    printMenu(botPaper.win, botPaper.currentRow, MENU)
+    printMenu(topPaper.win, topPaper.currentRow, topPaper.items)
+    printMenu(botPaper.win, botPaper.currentRow, botPaper.items)
 
     # run stuff
     while True:
+
         key = scr.getch()
 
-        if key == 27:
+        if key in [27, 113]:
             # exit
             break
         elif (key == curses.KEY_UP) and (papers[0].currentRow > 0):
             # go down a row
             papers[0].currentRow -= 1
-        elif (key == curses.KEY_DOWN) and (papers[0].currentRow < len(MENU)-1):
+        elif (key == curses.KEY_DOWN and
+              papers[0].currentRow < len(papers[0].items)-1):
             # go up a row
             papers[0].currentRow += 1
         elif key == 9:
@@ -113,8 +128,8 @@ def main(scr):
         else:
             pass
 
-        printMenu(papers[0].win, papers[0].currentRow, MENU)
-
+        # Print menu in current window only
+        printMenu(papers[0].win, papers[0].currentRow, papers[0].items)
 
 if __name__ == '__main__':
     curses.wrapper(main)
