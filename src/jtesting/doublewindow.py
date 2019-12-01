@@ -36,19 +36,19 @@ class paperPanel:
         titleBeginning = l//2 - len(titlePadded)//2
         self.win.addstr(0, titleBeginning, titlePadded)
 
-def fixStrings(listOfStrings, maxWidth):
+def shortenLine(listOfStrings, maxWidth):
     for i, elem in enumerate(listOfStrings):
         if len(elem) > maxWidth:
             # should we show extension?
             listOfStrings[i] = elem[:maxWidth-7] + '...'
     return listOfStrings
 
-def printMenu(scr, selected_row_idx, items=['']):
+def printMenu(scr, selected_row_idx, items=[]):
     # scr.clear()
     h, w = scr.getmaxyx()
 
     # Make sure strings within a single line
-    items = fixStrings(items, w-2)
+    items = shortenLine(items, w-2)
     for y in range(1, h-1):
         scr.addstr(y, 1, " "*(w-2))
 
@@ -93,14 +93,15 @@ def main(scr):
     #setup
     try:
         curses.curs_set(0)
-    except:
+    except curses.error:
         pass
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     # find window corners to init paper windows
     y0, x0, ncols, nlines = getCorners(scr)
     topPaper = paperPanel(nlines//2, ncols, y0, x0, "1st panel", MENU)
-    botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel", FILEMENU)
+    botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel",
+                          FILEMENU)
     papers = [botPaper, topPaper]
 
     # initial display of windows before loop

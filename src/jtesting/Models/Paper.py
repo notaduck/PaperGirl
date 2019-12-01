@@ -1,6 +1,8 @@
 class Paper:
-    def __init__(self, author, creator, producer, subject, title, file_name, path):
+    def __init__(self, title, author, creator, producer, subject,
+                 file_name, path):
         # TODO: check out *args and **kwargs for less clutter in init call
+        self.title = title
         self.author = author
         self.creator = creator
         self.producer = producer
