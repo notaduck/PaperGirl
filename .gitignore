@@ -116,5 +116,5 @@ flycheck_*.el
 .dir-locals.el
 
 # mypy
-.mypy_cache/
+*.mypy_cache/
 __pycache__/
