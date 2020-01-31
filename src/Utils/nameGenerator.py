@@ -3,6 +3,8 @@ import pdftitle
 import socket
 import PyPDF2
 import re
+import os
+dirname = os.path.dirname(__file__)
 
 def is_connected():
     try:
@@ -51,6 +53,6 @@ def get_title(isbn_numbers):
 
 if is_connected():
     # isbn = get_isbn('/home/fuzie/Documents/Books/Neil A. Campbell et al. - Biology_ A Global Approach (Global Edition)-Pearson (2017).pdf')
-    isbn = get_isbn('../../demo.pdf')
+    isbn = get_isbn(os.path.join(dirname, '../../demo.pdf'))
     title = get_title(isbn)
     print(title)
