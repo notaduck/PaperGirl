@@ -3,8 +3,6 @@ import pdftitle
 import socket
 import PyPDF2
 import re
-# def get_information(isbn):
-    
 
 def is_connected():
     try:
@@ -27,10 +25,11 @@ def get_isbn(pdf_path):
         return match.group(1)
 
 def get_title(isbn):
+
     cleaned_isbn = isbnlib.clean(isbn)
     if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
         book = isbnlib.meta(cleaned_isbn)
-        return book['Title']
+        return book['Title'
 
     return "no meta data was found."
 
