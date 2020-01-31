@@ -27,16 +27,12 @@ def get_isbn(pdf_path):
         return match.group(1)
 
 def get_title(isbn):
-        book = isbnlib.meta(isbn)
+    cleaned_isbn = isbnlib.clean(isbn)
+    if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
+        book = isbnlib.meta(cleaned_isbn)
         return book['Title']
 
 if(is_connected):
     isbn = get_isbn('/home/daniel/Projects/PaperGirl/demo.pdf')
     title = get_title(isbn)
     print(title)
-
-
-     
-
-
-
