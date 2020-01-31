@@ -32,6 +32,8 @@ def get_title(isbn):
         book = isbnlib.meta(cleaned_isbn)
         return book['Title']
 
+    return "no meta data was found."
+
 if(is_connected):
     isbn = get_isbn('/home/daniel/Projects/PaperGirl/demo.pdf')
     title = get_title(isbn)
