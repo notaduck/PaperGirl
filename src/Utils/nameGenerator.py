@@ -50,6 +50,7 @@ def get_title(isbn_numbers):
     # return "no meta data was found."
 
 if is_connected():
-    isbn = get_isbn('/home/fuzie/Documents/Books/Neil A. Campbell et al. - Biology_ A Global Approach (Global Edition)-Pearson (2017).pdf')
+    # isbn = get_isbn('/home/fuzie/Documents/Books/Neil A. Campbell et al. - Biology_ A Global Approach (Global Edition)-Pearson (2017).pdf')
+    isbn = get_isbn('../../demo.pdf')
     title = get_title(isbn)
     print(title)
