@@ -3,8 +3,6 @@ import pdftitle
 import socket
 import PyPDF2
 import re
-# def get_information(isbn):
-
 
 def is_connected():
     try:
@@ -40,13 +38,16 @@ def get_isbn(pdf_path, max_pages=5):
 
         return res
 
-def get_title(isbn):
-    cleaned_isbn = isbnlib.clean(isbn)
-    if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
-        book = isbnlib.meta(cleaned_isbn)
-        return book['Title']
+def get_title(isbn_numbers):
 
-    return "no meta data was found."
+    for isbn in isbn_numbers:
+        cleaned_isbn = isbnlib.clean(isbn)
+        if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
+            book = isbnlib.meta(cleaned_isbn)
+            return book['Title']
+            break
+
+    # return "no meta data was found."
 
 if is_connected():
     isbn = get_isbn('/home/fuzie/Documents/Books/Neil A. Campbell et al. - Biology_ A Global Approach (Global Edition)-Pearson (2017).pdf')
