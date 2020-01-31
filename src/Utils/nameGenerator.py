@@ -17,23 +17,40 @@ def is_connected():
 def get_isbn(pdf_path):
     with open(pdf_path, mode='rb') as f:
         reader = PyPDF2.PdfFileReader(f)
-        pages = [reader.getPage(i).extractText().replace('\n', '') for i in range(10)]
-        
-        isb_13 ="(?:I.*S.*B.*N.*(?:-13)?:?\ )?(?=[0-9]{13}|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17})(97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9])"
-        match = re.search(isb_13, pages[3], flags=re.MULTILINE)
-        
-        return match.group(1)
+        pages = [reader.getPage(i).extractText().replace('\n', '') for i in range(5)]
 
-def get_title(isbn):
+        isbn_13 = r"(?:I\w*S\w*B\w*N\w*(?:[-\s]13)?:?\ )?(?=[0-9]{13}|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17})(97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9])"
 
-    cleaned_isbn = isbnlib.clean(isbn)
-    if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
-        book = isbnlib.meta(cleaned_isbn)
-        return book['Title'
+        isbn_10 = r"(?:I\w*S\w*B\w*N\w*(?:[-\s:]10)?:?\s)?(?=[0-9X]{10}|(?=(?:[0-9]+[-\ ]){3})[-\ 0-9X]{13})([0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9X])"
 
-    return "no meta data was found."
+        matches_13 = re.finditer(isbn_13, pages[3], re.MULTILINE)
+        matches_10 = re.finditer(isbn_10, pages[3], re.MULTILINE)
+
+        m13 = [match.group() for match in matches_13]
+        m10 = [match.group() for match in matches_10]
+
+        m13 = list(set(m13) - set(m10))
+        m10 = list(set(m10) - set(m13))
+
+        res = [re.sub(r'ISBN \d{2}:?', '', s).strip()
+               for s in (m13 + m10)]
+
+        return res
+
+def get_title(isbn_numbers):
+    
+    for isbn in isbn_numbers:
+        cleaned_isbn = isbnlib.clean(isbn)
+        if (isbnlib.is_isbn13(cleaned_isbn) or isbnlib.is_isbn10(cleaned_isbn)):
+            book = isbnlib.meta(cleaned_isbn)
+            return book['Title']
+            break
+
+    # return "no meta data was found."
 
 if(is_connected):
+    # isbn = get_isbn('/home/fuzie/Documents/Books/Neil A. Campbell et al. - Biology_ A Global Approach (Global Edition)-Pearson (2017).pdf')
     isbn = get_isbn('/home/daniel/Projects/PaperGirl/demo.pdf')
+    print(isbn)
     title = get_title(isbn)
     print(title)
