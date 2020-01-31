@@ -12,13 +12,16 @@ class paperPanel:
         self.win = curses.newwin(h, l, y, x)
         self.win.erase()
         self.win.box()
+
+        # set title and items
         self.title = title
         self.items = items
+
         # create paper title if not empty
         if title != '':
             self.writeTitle(l, title)
 
-            # init active row to 0
+        # init active row to 0
         self.currentRow = 0
         self.panel = cpanel.new_panel(self.win)
 
@@ -48,9 +51,10 @@ def printMenu(scr, selected_row_idx, items=[]):
     h, w = scr.getmaxyx()
 
     # Make sure strings within a single line
-    items = shortenLine(items, w-2)
-    for y in range(1, h-1):
-        scr.addstr(y, 1, " "*(w-2))
+    if items:
+        items = shortenLine(items, w-2)
+        for y in range(1, h-1):
+            scr.addstr(y, 1, " "*(w-2))
 
     for idx, row in enumerate(items):
 

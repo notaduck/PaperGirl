@@ -118,3 +118,4 @@ flycheck_*.el
 # mypy
 *.mypy_cache/
 __pycache__/
+.python-version
