@@ -25,8 +25,7 @@ def get_isbn(pdf_path):
         match = re.search(isb_13, pages[3], flags=re.MULTILINE)
         
         book = isbnlib.meta(match.group(1))
-    
-        return book['title']
+        return book['Title']
 
 
 if(is_connected):
