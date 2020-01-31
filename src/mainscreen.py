@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from Papers import get_info, get_files
 from curses import panel as cpanel
 import curses
-from Papers import get_info, get_files
 
 MENU = ['Home', 'Play', 'Scoreboard', 'Exit']
 FILEMENU = get_files() + ['Exit']
@@ -39,6 +39,7 @@ class paperPanel:
         titleBeginning = l//2 - len(titlePadded)//2
         self.win.addstr(0, titleBeginning, titlePadded)
 
+
 def shortenLine(listOfStrings, maxWidth):
     for i, elem in enumerate(listOfStrings):
         if len(elem) > maxWidth:
@@ -46,7 +47,8 @@ def shortenLine(listOfStrings, maxWidth):
             listOfStrings[i] = elem[:maxWidth-7] + '...'
     return listOfStrings
 
-def printMenu(scr, selected_row_idx, items=[]):
+
+def printMenu(scr, selected_row_idx, items=[], hide_cursor=False):
     # scr.clear()
     h, w = scr.getmaxyx()
 
@@ -64,7 +66,7 @@ def printMenu(scr, selected_row_idx, items=[]):
         x = 1
         y = 1 + idx
 
-        if idx == selected_row_idx:
+        if idx == selected_row_idx and not hide_cursor:
             scr.attron(curses.color_pair(1))
             scr.addstr(y, x, row)
             scr.attroff(curses.color_pair(1))
@@ -106,10 +108,10 @@ def main(scr):
     topPaper = paperPanel(nlines//2, ncols, y0, x0, "1st panel", MENU)
     botPaper = paperPanel(nlines//2, ncols, y0+nlines//2, x0, "2nd panel",
                           FILEMENU)
-    papers = [botPaper, topPaper]
+    panels = [botPaper, topPaper]
 
     # initial display of windows before loop
-    printMenu(topPaper.win, topPaper.currentRow, topPaper.items)
+    printMenu(topPaper.win, topPaper.currentRow, topPaper.items, hide_cursor=True)
     printMenu(botPaper.win, botPaper.currentRow, botPaper.items)
 
     # run stuff
@@ -120,21 +122,22 @@ def main(scr):
         if key in [27, 113]:
             # exit
             break
-        elif (key == curses.KEY_UP) and (papers[0].currentRow > 0):
+        elif (key == curses.KEY_UP) and (panels[0].currentRow > 0):
             # go down a row
-            papers[0].currentRow -= 1
+            panels[0].currentRow -= 1
         elif (key == curses.KEY_DOWN and
-              papers[0].currentRow < len(papers[0].items)-1):
+              panels[0].currentRow < len(panels[0].items)-1):
             # go up a row
-            papers[0].currentRow += 1
+            panels[0].currentRow += 1
         elif key == 9:
             # tab changes avtive paper window
-            papers = papers[::-1]
+            panels = panels[::-1]
         else:
             pass
 
         # Print menu in current window only
-        printMenu(papers[0].win, papers[0].currentRow, papers[0].items)
+        printMenu(panels[0].win, panels[0].currentRow, panels[0].items)
+        printMenu(panels[1].win, panels[1].currentRow, panels[1].items, hide_cursor=True)
 
 if __name__ == '__main__':
     curses.wrapper(main)
