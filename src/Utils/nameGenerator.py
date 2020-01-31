@@ -24,9 +24,12 @@ def get_isbn(pdf_path):
         isb_13 ="(?:I.*S.*B.*N.*(?:-13)?:?\ )?(?=[0-9]{13}|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17})(97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9])"
         match = re.search(isb_13, pages[3], flags=re.MULTILINE)
         
-        book = isbnlib.meta(match.group(1))
-        return book['Title']
+        return match.group(1)
 
+def get_title(isbn)
+
+        book = isbnlib.meta(isbn)
+        return book['Title']
 
 if(is_connected):
     get_isbn('/home/daniel/Projects/PaperGirl/demo.pdf')
